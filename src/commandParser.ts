@@ -3,7 +3,7 @@ let commands=require('./commandDefiner')
 function commandParser(command:string,...args:string[]):void{
 
 
-let inputs:string[]=args.slice(1);
+let inputs:string[]=args.slice();
 
 
 if(command in commands){
