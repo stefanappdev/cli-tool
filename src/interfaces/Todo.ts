@@ -2,8 +2,8 @@ interface TODO{
     id:number,
     description:string,
     status:string,
-    createdAt:Date,
-    updatedAt:Date,
+    createdAt:string,
+    updatedAt:string,
 }
 
 
