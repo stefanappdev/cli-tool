@@ -65,15 +65,17 @@ async function updateTask(targetId:number,desc:string):Promise<void>{
 }
 
 
-async function addTask(input:string[]){
+async function addTask(inputs:string[]){
 
-      
-
-        if(input[0]?.trim()===''){
-            console.log("Command addTask requires a description for task");
-            return
-        }
-   
+        
+    if (inputs.length>1){
+        console.log('too many arguements provided for addTask')
+        return
+    }else if(inputs.every(input=>input==='')){
+        console.log('no arguements provided for addTask')
+        return
+    }
+    
    
 
     let path='./src/List.json'
@@ -84,7 +86,7 @@ async function addTask(input:string[]){
 
     let newTask:TODO={
         id: taskID,
-        description:input[0]?input[0]:'',
+        description:inputs[0]?inputs[0]?.toString():'No description provided',
         status:'active',
         createdAt:formattedDate,
         updatedAt:formattedDate,

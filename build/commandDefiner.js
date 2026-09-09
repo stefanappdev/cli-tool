@@ -47,9 +47,13 @@ async function updateTask(targetId, desc) {
     }
     //await writeToFile(path,JSONdata)
 }
-async function addTask(input) {
-    if (input[0]?.trim() === '') {
-        console.log("Command addTask requires a description for task");
+async function addTask(inputs) {
+    if (inputs.length > 1) {
+        console.log('too many arguements provided for addTask');
+        return;
+    }
+    else if (inputs.every(input => input === '')) {
+        console.log('no arguements provided for addTask');
         return;
     }
     let path = './src/List.json';
@@ -58,7 +62,7 @@ async function addTask(input) {
     let taskID = Math.floor(Math.random() * 40);
     let newTask = {
         id: taskID,
-        description: input[0] ? input[0] : '',
+        description: inputs[0] ? inputs[0]?.toString() : 'No description provided',
         status: 'active',
         createdAt: formattedDate,
         updatedAt: formattedDate,
