@@ -2,8 +2,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const { Parser } = require('../commandParser');
-let consoleInputs = process.argv.slice(2);
-let command = consoleInputs[0];
-let commandInputs = consoleInputs.slice(1);
-Parser(command, commandInputs);
+let inputs = process.argv.slice(2);
+console.log("Inputs entered:", inputs);
+let command = inputs[0];
+let commandInputs = inputs.slice(1);
+command ? Parser(command, ...commandInputs) : console.log('No command specified');
 //# sourceMappingURL=index.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"TodoList.d.ts","sourceRoot":"","sources":["../../src/classes/TodoList.ts"],"names":[],"mappings":"AACA,OAAO,IAAI,MAAM,oBAAoB,CAAC;AAEtC,cAAM,QAAQ;IACd,KAAK,EAAC,IAAI,EAAE,CAAG;gBAEH,KAAK,GAAC,IAAI,EAAK;IAM3B,GAAG,CAAC,WAAW,EAAC,MAAM;IAkBlB,IAAI,IAAG,IAAI;IAUX,IAAI;CAMP;AAED,eAAe,QAAQ,CAAA"}
