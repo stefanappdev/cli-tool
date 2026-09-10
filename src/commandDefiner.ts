@@ -6,9 +6,9 @@ const fs=require('fs/promises');
 function help():void{
 
     console.log('Available commands:');
-    console.log('add<task>- add new task to tasklist');
-    console.log('delete <taskid> - removes task with specified ID from the list')
-    console.log('update <taskid> - update task with specified ID from the list');
+    console.log('addTask <task>- add new task to tasklist');
+    console.log('deleteTask <taskid> - removes task with specified ID from the list')
+    console.log('updateTask <taskid> - update task with specified ID from the list');
     console.log('showList - show tasks currently in the list'); 
     console.log('showCommpleted - show taskd in the list which is completed')
     console.log('help - show guide on set of commands available')
@@ -34,8 +34,23 @@ async function showList(){
     
 }   
 
-async function updateTask(targetId:number,desc:string):Promise<void>{
-    let path='./src/List.json'
+async function updateTask(inputs:string[]):Promise<void>{
+    
+    if(!Inputvalidator(inputs,2)){
+        return
+    }
+
+    let id:string|undefined=inputs[0];
+    let taskDescription:string|undefined=inputs[1];
+    let targetId:number|undefined=id?parseInt(id):-1
+
+    console.log("target ID:",targetId)
+    if(Number.isNaN(targetId)||targetId===-1){
+        console.log('failure to populate task ID for update ');
+        return
+    }
+    let path='./src/List.json';
+    
     /*read file first */
     let data:string='';
     try{
@@ -48,8 +63,31 @@ async function updateTask(targetId:number,desc:string):Promise<void>{
     let JSONdata=JSON.parse(data);
     
     
-    //console.log("updated:",JSONdata['tasks'])
     
+    
+    let targetTask=JSONdata['tasks'].find((task:TODO)=>{
+        if(task.id===targetId){
+            console.log("task sucessfully found!")
+            return task
+        }
+    });
+    
+    
+
+    if(targetTask){
+        console.log("task before update:",targetTask)
+        targetTask.description=taskDescription?taskDescription:targetTask.description;
+        console.log("task after update:",targetTask)
+    }else{
+        console.log('unable to find specified task for update')
+        return
+    }
+
+
+    
+    console.log("File updated sucessfully")
+
+
     async function writeToFile(path:string,data:string){
         try{
             await fs.writeFile(path,JSON.stringify(data,null,4));
@@ -59,24 +97,32 @@ async function updateTask(targetId:number,desc:string):Promise<void>{
         }
     }
 
-   //await writeToFile(path,JSONdata)
+   await writeToFile(path,JSONdata)
     
 
 }
 
 
+function Inputvalidator(inputs:string[],argsRequired:number):boolean{
+      if (inputs.length>argsRequired){
+        console.log('too many arguements provided for command')
+        return false
+    }else if(inputs.length<argsRequired){
+        console.log('too few arguements provided for command')
+        return false
+    }
+
+    return true
+}
+
 async function addTask(inputs:string[]){
 
-        
-    if (inputs.length>1){
-        console.log('too many arguements provided for addTask')
-        return
-    }else if(inputs.every(input=>input==='')){
-        console.log('no arguements provided for addTask')
-        return
-    }
     
-   
+   if (!Inputvalidator(inputs,1)){
+        return
+   }
+
+   let taskDescription:string|undefined=inputs[0]?.trim();
 
     let path='./src/List.json'
 
@@ -86,7 +132,7 @@ async function addTask(inputs:string[]){
 
     let newTask:TODO={
         id: taskID,
-        description:inputs[0]?inputs[0]?.toString():'No description provided',
+        description:taskDescription?taskDescription:'',
         status:'active',
         createdAt:formattedDate,
         updatedAt:formattedDate,

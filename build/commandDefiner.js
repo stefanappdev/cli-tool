@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require('fs/promises');
 function help() {
     console.log('Available commands:');
-    console.log('add<task>- add new task to tasklist');
-    console.log('delete <taskid> - removes task with specified ID from the list');
-    console.log('update <taskid> - update task with specified ID from the list');
+    console.log('addTask <task>- add new task to tasklist');
+    console.log('deleteTask <taskid> - removes task with specified ID from the list');
+    console.log('updateTask <taskid> - update task with specified ID from the list');
     console.log('showList - show tasks currently in the list');
     console.log('showCommpleted - show taskd in the list which is completed');
     console.log('help - show guide on set of commands available');
@@ -24,7 +24,18 @@ async function showList() {
         throw new Error('Error opening file');
     }
 }
-async function updateTask(targetId, desc) {
+async function updateTask(inputs) {
+    if (!Inputvalidator(inputs, 2)) {
+        return;
+    }
+    let id = inputs[0];
+    let taskDescription = inputs[1];
+    let targetId = id ? parseInt(id) : -1;
+    console.log("target ID:", targetId);
+    if (Number.isNaN(targetId) || targetId === -1) {
+        console.log('failure to populate task ID for update ');
+        return;
+    }
     let path = './src/List.json';
     /*read file first */
     let data = '';
@@ -35,7 +46,22 @@ async function updateTask(targetId, desc) {
         console.log("Error occured in reading file");
     }
     let JSONdata = JSON.parse(data);
-    //console.log("updated:",JSONdata['tasks'])
+    let targetTask = JSONdata['tasks'].find((task) => {
+        if (task.id === targetId) {
+            console.log("task sucessfully found!");
+            return task;
+        }
+    });
+    if (targetTask) {
+        console.log("task before update:", targetTask);
+        targetTask.description = taskDescription ? taskDescription : targetTask.description;
+        console.log("task after update:", targetTask);
+    }
+    else {
+        console.log('unable to find specified task for update');
+        return;
+    }
+    console.log("File updated sucessfully");
     async function writeToFile(path, data) {
         try {
             await fs.writeFile(path, JSON.stringify(data, null, 4));
@@ -45,24 +71,31 @@ async function updateTask(targetId, desc) {
             console.log("Error occured in writing to file");
         }
     }
-    //await writeToFile(path,JSONdata)
+    await writeToFile(path, JSONdata);
+}
+function Inputvalidator(inputs, argsRequired) {
+    if (inputs.length > argsRequired) {
+        console.log('too many arguements provided for command');
+        return false;
+    }
+    else if (inputs.length < argsRequired) {
+        console.log('too few arguements provided for command');
+        return false;
+    }
+    return true;
 }
 async function addTask(inputs) {
-    if (inputs.length > 1) {
-        console.log('too many arguements provided for addTask');
+    if (!Inputvalidator(inputs, 1)) {
         return;
     }
-    else if (inputs.every(input => input === '')) {
-        console.log('no arguements provided for addTask');
-        return;
-    }
+    let taskDescription = inputs[0]?.trim();
     let path = './src/List.json';
     let currentDate = new Date();
     let formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDay()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
     let taskID = Math.floor(Math.random() * 40);
     let newTask = {
         id: taskID,
-        description: inputs[0] ? inputs[0]?.toString() : 'No description provided',
+        description: taskDescription ? taskDescription : '',
         status: 'active',
         createdAt: formattedDate,
         updatedAt: formattedDate,
