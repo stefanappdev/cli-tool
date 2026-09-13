@@ -1,1 +1,3 @@
-{"tasks":[{"id":24,"description":"buy lunch at the restaurant","status":"active","createdAt":"2026-9-5 9:29:24","updatedAt":"2026-9-5 9:29:24"},{"id":3,"description":"go to work","status":"active","createdAt":"2026-9-5 9:53:57","updatedAt":"2026-9-5 9:53:57"}]}
+{
+    "tasks": []
+}

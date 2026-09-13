@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inputvalidator_1 = __importDefault(require("../helpers/inputvalidator"));
+const writeToFile_1 = __importDefault(require("../helpers/writeToFile"));
 const fs = require('fs/promises');
 async function addTask(inputs) {
     if (!(0, inputvalidator_1.default)(inputs, 1, 0)) {
@@ -46,16 +47,7 @@ async function addTask(inputs) {
     /*update task array*/
     JSONdata['tasks'] = [...JSONdata['tasks'], newTask];
     /*write to file*/
-    async function writeToFile(path, data) {
-        try {
-            await fs.writeFile(path, JSON.stringify(data, null, 4));
-            console.log(`Task with ID:${taskID} sucessfully written to file`);
-        }
-        catch (err) {
-            console.log('An error occured while writing to the file');
-        }
-    }
-    await writeToFile(path, JSONdata);
+    await (0, writeToFile_1.default)(path, JSONdata);
 }
 exports.default = addTask;
 //# sourceMappingURL=addTask.js.map

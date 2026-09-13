@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inputvalidator_1 = __importDefault(require("../helpers/inputvalidator"));
+const writeToFile_1 = __importDefault(require("../helpers/writeToFile"));
 const fs = require('fs/promises');
 async function deleteTask(inputs) {
     if (!(0, inputvalidator_1.default)(inputs, 1, 0)) {
@@ -42,16 +43,7 @@ async function deleteTask(inputs) {
     const remainingTasks = JSONdata['tasks'].filter((task) => task.id != targetId);
     JSONdata['tasks'] = remainingTasks;
     console.log('task sucessfully deleted');
-    const writeToFile = async (path, data) => {
-        try {
-            await fs.writeFile(path, JSON.stringify(data));
-            console.log('tasks updated sucessfully');
-        }
-        catch (err) {
-            console.log('Error occured in updating Tasks');
-        }
-    };
-    writeToFile(path, JSONdata);
+    (0, writeToFile_1.default)(path, JSONdata);
 }
 exports.default = deleteTask;
 //# sourceMappingURL=deleteTask.js.map

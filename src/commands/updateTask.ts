@@ -1,4 +1,5 @@
 import Inputvalidator from "../helpers/inputvalidator";
+import writeToFile from "../helpers/writeToFile";
 const fs=require('fs/promises');
 import TODO from "../interfaces/Todo";
 
@@ -49,7 +50,6 @@ async function updateTask(inputs:string[]):Promise<void>{
     
     let targetTask=JSONdata['tasks'].find((task:TODO)=>{
         if(task.id===targetId){
-            console.log("task sucessfully found!")
             return task
         }
     });
@@ -57,8 +57,9 @@ async function updateTask(inputs:string[]):Promise<void>{
     
 
     if(targetTask){
+        console.log("task sucessfully found!\n")
         console.log("task before update:",targetTask)
-        targetTask.description=taskDescription?taskDescription:targetTask.description;
+        taskDescription?targetTask.description=taskDescription:targetTask.description
         
 
         if(status){
@@ -79,15 +80,6 @@ async function updateTask(inputs:string[]):Promise<void>{
     
     console.log("File updated sucessfully")
 
-
-    async function writeToFile(path:string,data:string){
-        try{
-            await fs.writeFile(path,JSON.stringify(data,null,4));
-            console.log(`Task sucessfully updated list`)            
-        }catch(err){
-               console.log("Error occured in writing to file")
-        }
-    }
 
    await writeToFile(path,JSONdata)
     

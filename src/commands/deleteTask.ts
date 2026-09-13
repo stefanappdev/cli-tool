@@ -1,6 +1,7 @@
 
 import TODO from "../interfaces/Todo";
 import Inputvalidator from "../helpers/inputvalidator";
+import writeToFile from "../helpers/writeToFile";
 const fs=require('fs/promises');
 
 
@@ -50,15 +51,7 @@ async function deleteTask(inputs:string[]):Promise<void>{
     JSONdata['tasks']=remainingTasks
     console.log('task sucessfully deleted')
 
-    const writeToFile=async (path:string,data:string)=>{
-        try{
-            await fs.writeFile(path,JSON.stringify(data))
-            console.log('tasks updated sucessfully')
-        }catch(err){
-            console.log('Error occured in updating Tasks')
-        }
-    }
-
+    
 
     writeToFile(path,JSONdata)
 }

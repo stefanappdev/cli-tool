@@ -1,4 +1,5 @@
 import Inputvalidator from "../helpers/inputvalidator";
+import writeToFile from "../helpers/writeToFile";
 const fs=require('fs/promises');
 import TODO from "../interfaces/Todo";
 
@@ -56,16 +57,6 @@ async function addTask(inputs:string[]){
         JSONdata['tasks']=[...JSONdata['tasks'],newTask];
 
         /*write to file*/
-        async function writeToFile(path:string,data:TODO[]){
-            try{
-                await fs.writeFile(path,JSON.stringify(data,null,4))
-                console.log(`Task with ID:${taskID} sucessfully written to file`)
-            }catch(err){
-                console.log('An error occured while writing to the file')
-            }
-            
-        }
-
         
     await writeToFile(path,JSONdata)    
 

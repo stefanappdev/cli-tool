@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inputvalidator_1 = __importDefault(require("../helpers/inputvalidator"));
+const writeToFile_1 = __importDefault(require("../helpers/writeToFile"));
 const fs = require('fs/promises');
 async function updateTask(inputs) {
     if (!(0, inputvalidator_1.default)(inputs, 2, 1)) {
@@ -40,13 +41,13 @@ async function updateTask(inputs) {
     }
     let targetTask = JSONdata['tasks'].find((task) => {
         if (task.id === targetId) {
-            console.log("task sucessfully found!");
             return task;
         }
     });
     if (targetTask) {
+        console.log("task sucessfully found!\n");
         console.log("task before update:", targetTask);
-        targetTask.description = taskDescription ? taskDescription : targetTask.description;
+        taskDescription ? targetTask.description = taskDescription : targetTask.description;
         if (status) {
             if (status.toUpperCase() === 'C') {
                 targetTask.status = taskstatus.completed;
@@ -63,16 +64,7 @@ async function updateTask(inputs) {
         return;
     }
     console.log("File updated sucessfully");
-    async function writeToFile(path, data) {
-        try {
-            await fs.writeFile(path, JSON.stringify(data, null, 4));
-            console.log(`Task sucessfully updated list`);
-        }
-        catch (err) {
-            console.log("Error occured in writing to file");
-        }
-    }
-    await writeToFile(path, JSONdata);
+    await (0, writeToFile_1.default)(path, JSONdata);
 }
 exports.default = updateTask;
 //# sourceMappingURL=updateTask.js.map
